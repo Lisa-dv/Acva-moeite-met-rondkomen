@@ -2,6 +2,8 @@
 
 iets aanpassen, test
 
+iets leuks
+
 Een eerste kennismaking met data in R: bestanden inladen (csv, Excel, rds) en bekijken wat erin zit.
 
 ## Aan de slag
