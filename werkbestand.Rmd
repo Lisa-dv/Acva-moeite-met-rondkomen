@@ -20,3 +20,677 @@ View(moeite)
 # Lisa
 
 # Sam
+
+```{r}
+mean(number_of_kittens)
+mean("number_of_kittens")
+library(kittens)
+library(kittens.csv)
+mean(number_of_kittens$Ozone, na.rm = TRUE)
+df3
+df[3]
+df[3,4]
+df[number_of_kittens]
+mean(3, 1, 5, 6, 2, 5, 10)
+mean(number_of_extra_cute_ki
+mean(df$number_of_kittens)
+mean(kittens$number_of_kittens)
+mean(kittens$number_of_extra_cute_kittens)
+mean(kittens$number_extra_cute_kittens)
+aggregate(number_of_kittens ~ provincies, data = kittens)
+aggregate(number_of_kittens ~ provincie, data = kittens)
+aggregate(number_of_kittens ~ provincie, data = kittens, sum)
+median(df$number_of_kittens)
+median(kittens$number_of_kittens)
+aggregate(number_of_extra_cute_kittens ~ provincie, data = kittens, sum)
+aggregate(number_extra_cute_kittens ~ provincie, data = kittens, sum)
+aggregate(number_extra_cute_kittens ~ year, data = kittens, sum)
+aggregate(number_of_kittens ~ year, data = kittens, sum)
+library(ggplot2)
+
+
+ggplot(kittens_per_prov, aes(x = jaartal, y = number_of_kittens, color = provincie)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Aantal kittens per jaar en provincie", x = "Jaartal", y = "Aantal kittens")
+# Zet de data om in een tabel met jaren als rijen en provincies als kolommen
+tabel_prov <- xtabs(number_of_kittens ~ year + provincie, data = kittens)
+
+library(readr)
+library(dplyr)
+install.packages("dplyr")
+library(tidyr)
+install.packages("tidyr")
+library(gt)
+install.packages("gt")
+df <- read_delim(
+  "zuid_noord_buurten.csv",
+  delim = ";",
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+    Leeftijd = factor(
+      as.character(Leeftijd),
+      levels = c("20300", "53115", "80200"),
+      labels = c("Leeftijdscode 20300", "Leeftijdscode 53115", "Leeftijdscode 80200")
+    )
+  )
+df <- read_delim(
+  file.choose(),
+  delim = ";",
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+  
+  df <- read_delim(
+    "zuid_noord_buurten",
+    delim = ";",
+    locale = locale(decimal_mark = ","),
+    show_col_types = FALSE
+  ) %>%
+    mutate(
+      Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+      Leeftijd = factor(
+        as.character(Leeftijd),
+        levels = c("20300", "53115", "80200"),
+        labels = c("Leeftijdscode 20300", "Leeftijdscode 53115", "Leeftijdscode 80200")
+      )
+    )
+library(dplyr)
+  library(readr)
+  library(dplyr)
+  library(tidyr)
+  library(gt)
+class(zuid_noord_buurten$MoeiteMetRondkomen_32)
+df <- zuid_noord_buurten %>%
+  mutate(
+    Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+    Leeftijd = factor(
+      as.character(Leeftijd),
+      levels = c("20300", "53115", "80200"),
+      labels = c("Leeftijdscode 20300", "Leeftijdscode 53115", "Leeftijdscode 80200")
+    )
+  )
+library(dplyr)
+library(tidyr)
+
+samenvatting <- df %>%
+  filter(!is.na(MoeiteMetRondkomen_32)) %>%
+  group_by(Stadsdeel, Leeftijd) %>%
+  summarise(
+    gemiddelde = mean(MoeiteMetRondkomen_32, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(
+    names_from = Stadsdeel,
+    values_from = c(gemiddelde, n),
+    names_sep = "_"
+  )
+library(dplyr)
+library(tidyr)
+
+totaal_rij <- df %>%
+  filter(!is.na(MoeiteMetRondkomen_32)) %>%
+  group_by(Stadsdeel) %>%
+  summarise(
+    gemiddelde = mean(MoeiteMetRondkomen_32, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(
+    names_from = Stadsdeel,
+    values_from = c(gemiddelde, n),
+    names_sep = "_"
+  ) %>%
+  mutate(Leeftijd = "Totaal")
+
+tabel_data <- bind_rows(samenvatting, totaal_rij)
+library(gt)
+
+tabel_data %>%
+  gt(rowname_col = "Leeftijd") %>%
+  tab_header(
+    title = md("**TABEL** | Moeite met rondkomen per stadsdeel en leeftijdsgroep")
+  ) %>%
+  tab_spanner(
+    label = "Moeite met rondkomen (%)",
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid)
+  ) %>%
+  tab_spanner(
+    label = "Aantal buurten (n)",
+    columns = c(n_Noord, n_Zuid)
+  ) %>%
+  cols_label(
+    gemiddelde_Noord = "Noord",
+    gemiddelde_Zuid = "Zuid",
+    n_Noord = "Noord",
+    n_Zuid = "Zuid"
+  ) %>%
+  fmt_number(
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid),
+    decimals = 1,
+    dec_mark = ","
+  ) %>%
+  fmt_integer(
+    columns = c(n_Noord, n_Zuid),
+    sep_mark = "."
+  ) %>%
+  tab_row_group(
+    label = "Leeftijdsgroep",
+    rows = 1:3
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = "top", weight = px(2)),
+    locations = cells_body(rows = Leeftijd == "Totaal")
+  )
+df <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+    Leeftijd = factor(
+      as.character(Leeftijd),
+      levels = c("20300", "53115", "80200"),
+      labels = c("18 jaar of ouder", "18 tot 65 jaar", "65 jaar of ouder")
+    )
+  )
+df <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+    Leeftijd = factor(
+      as.character(Leeftijd),
+      levels = c("53115", "80200", "20300"),
+      labels = c("18 tot 65 jaar", "65 jaar of ouder", "18 jaar of ouder (totaal)")
+    )
+  )
+tabel_data <- df %>%
+  filter(!is.na(MoeiteMetRondkomen_32)) %>%
+  group_by(Stadsdeel, Leeftijd) %>%
+  summarise(
+    gemiddelde = mean(MoeiteMetRondkomen_32, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(
+    names_from = Stadsdeel,
+    values_from = c(gemiddelde, n),
+    names_sep = "_"
+  ) %>%
+  arrange(Leeftijd)
+tabel_data %>%
+  gt(rowname_col = "Leeftijd") %>%
+  tab_header(
+    title = md("**TABEL** | Moeite met rondkomen per stadsdeel en leeftijdsgroep")
+  ) %>%
+  tab_spanner(
+    label = "Moeite met rondkomen (%)",
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid)
+  ) %>%
+  tab_spanner(
+    label = "Aantal buurten (n)",
+    columns = c(n_Noord, n_Zuid)
+  ) %>%
+  cols_label(
+    gemiddelde_Noord = "Noord",
+    gemiddelde_Zuid = "Zuid",
+    n_Noord = "Noord",
+    n_Zuid = "Zuid"
+  ) %>%
+  fmt_number(
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid),
+    decimals = 1,
+    dec_mark = ","
+  ) %>%
+  fmt_integer(
+    columns = c(n_Noord, n_Zuid),
+    sep_mark = "."
+  ) %>%
+  tab_row_group(
+    label = "Leeftijdsgroep",
+    rows = 1:2
+  ) %>%
+  tab_style(
+    style = list(
+      cell_borders(sides = "top", weight = px(2)),
+      cell_text(weight = "bold")
+    ),
+    locations = list(
+      cells_body(rows = 3),
+      cells_stub(rows = 3)
+    )
+  )
+df <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Stadsdeel = factor(Stadsdeel, levels = c("Noord", "Zuid")),
+    Leeftijd = factor(
+      as.character(Leeftijd),
+      levels = c("53115", "80200", "20300"),
+      labels = c("18 tot 65 jaar", "65 jaar of ouder", "18 jaar of ouder")
+    )
+  )
+tabel_data %>%
+  gt(rowname_col = "Leeftijd") %>%
+  tab_header(
+    title = md("**TABEL** | Moeite met rondkomen per stadsdeel en leeftijdsgroep")
+  ) %>%
+  tab_spanner(
+    label = "Moeite met rondkomen (%)",
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid)
+  ) %>%
+  tab_spanner(
+    label = "Aantal buurten (n)",
+    columns = c(n_Noord, n_Zuid)
+  ) %>%
+  cols_label(
+    gemiddelde_Noord = "Noord",
+    gemiddelde_Zuid = "Zuid",
+    n_Noord = "Noord",
+    n_Zuid = "Zuid"
+  ) %>%
+  fmt_number(
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid),
+    decimals = 1,
+    dec_mark = ","
+  ) %>%
+  fmt_integer(
+    columns = c(n_Noord, n_Zuid),
+    sep_mark = "."
+  ) %>%
+  tab_row_group(
+    label = "Leeftijdsgroep",
+    rows = 1:3
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#F4F6F8"),
+      cell_text(style = "italic")
+    ),
+    locations = list(
+      cells_body(rows = 3),
+      cells_stub(rows = 3)
+    )
+  ) %>%
+  tab_source_note(
+    source_note = "Noot. '18 jaar of ouder' betreft de bredere leeftijdsgroep en is geen optelling van de rijen erboven."
+  )
+tabel_data %>%
+  gt(rowname_col = "Leeftijd") %>%
+  tab_header(
+    title = md("**TABEL** | Moeite met rondkomen per stadsdeel en leeftijdsgroep")
+  ) %>%
+  tab_spanner(
+    label = "Moeite met rondkomen (%)",
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid)
+  ) %>%
+  tab_spanner(
+    label = "Aantal buurten (n)",
+    columns = c(n_Noord, n_Zuid)
+  ) %>%
+  cols_label(
+    gemiddelde_Noord = "Noord",
+    gemiddelde_Zuid = "Zuid",
+    n_Noord = "Noord",
+    n_Zuid = "Zuid"
+  ) %>%
+  fmt_number(
+    columns = c(gemiddelde_Noord, gemiddelde_Zuid),
+    decimals = 1,
+    dec_mark = ","
+  ) %>%
+  fmt_integer(
+    columns = c(n_Noord, n_Zuid),
+    sep_mark = "."
+  ) %>%
+  tab_row_group(
+    label = "Leeftijdsgroep",
+    rows = 1:3
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#F4F6F8"),
+      cell_text(style = "italic")
+    ),
+    locations = list(
+      cells_body(rows = 3),
+      cells_stub(rows = 3)
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "Betreft de bredere leeftijdsgroep en is geen optelling van de rijen erboven.",
+    locations = cells_stub(rows = 3)
+  ) %>%
+  opt_footnote_marks(marks = "standard")
+install.packages("cbsodataR")
+library(cbsodataR)
+Gemeentenaam_1 == "Amsterdam"
+toc <- cbs_get_toc()
+toc
+relevante_tabellen <- toc %>%
+  filter(grepl("woonomgeving|leefbaarheid|veiligheidsmonitor|gezondheidsmonitor", Title, ignore.case = TRUE)) %>%
+  select(Identifier, Title, ShortDescription, Period)
+
+library(dplyr)
+print(relevante_tabellen)
+tabel_id <- "81186ned"
+meta <- cbs_get_meta(811)
+print(meta$DataProperties %>% select(Key, Title, Description))
+cbs_data <- cbs_get_data(
+  id = tabel_id,
+  WijkenEnBuurten = has_substring("BU0363"),
+  Perioden = "2022JJ00"
+) %>%
+  cbs_add_label_columns()
+print(meta$Perioden[, c("Key", "Title")])
+buurt_tabellen <- toc %>%
+  filter(
+    grepl("buurt|wijk", Title, ignore.case = TRUE),
+    grepl("2022|2023|2024", Period)
+  ) %>%
+  select(Identifier, Title, Period)
+print(buurt_tabellen, n = 30)
+library(readr)
+library(dplyr)
+
+# 1. Lees jouw bestaande Noord/Zuid-buurtenlijst in (daar staat Stadsdeel al in!)
+mijn_buurten <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  distinct(WijkenEnBuurten, Stadsdeel)
+
+# 2. Lees de nieuwe RIVM-download in en koppel direct aan jouw Noord/Zuid-buurten
+rivm_nieuw <- read_delim(
+  "data/50150NED_UntypedDataSet_20261125213854.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  filter(Perioden == "2022JJ00") %>%
+  inner_join(mijn_buurten, by = "WijkenEnBuurten")
+list.files("data")
+mijn_buurten <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  distinct(WijkenEnBuurten, Stadsdeel)
+rivm_nieuw <- read_delim(
+  "data/50150NED_UntypedDataSet_20261125214805.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  filter(Perioden == "2022JJ00") %>%
+  inner_join(mijn_buurten, by = "WijkenEnBuurten")
+print(names(rivm_nieuw))
+mijn_buurten <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  distinct(WijkenEnBuurten, Stadsdeel)
+rivm_nieuw <- read_delim(
+  "data/50150NED_UntypedDataSet_20261125215825.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  filter(Perioden == "2022JJ00") %>%
+  inner_join(mijn_buurten, by = "WijkenEnBuurten")
+print(names(rivm_nieuw))
+library(readr)
+library(dplyr)
+mijn_buurten <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  distinct(WijkenEnBuurten, Stadsdeel)
+rivm_veerkracht <- read_delim(
+  "data/50150NED_UntypedDataSet_20261125221708.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  filter(Perioden == "2022JJ00") %>%
+  inner_join(mijn_buurten, by = "WijkenEnBuurten")
+bestanden <- list.files("data", pattern = "^50150NED_UntypedDataSet.*\\.csv$", full.names = TRUE)
+nieuwste_bestand <- sort(bestanden, decreasing = TRUE)[1]
+print(nieuwste_bestand)
+rivm_veerkracht <- read_delim(
+  nieuwste_bestand,
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(WijkenEnBuurten = trimws(WijkenEnBuurten)) %>%
+  filter(Perioden == "2022JJ00") %>%
+  inner_join(mijn_buurten, by = "WijkenEnBuurten")
+print(names(rivm_veerkracht))
+df_zn <- read_delim(
+  "zuid_noord_buurten.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    WijkenEnBuurten = trimws(WijkenEnBuurten),
+    Leeftijd = as.character(Leeftijd),
+    Marges = trimws(Marges),
+    Perioden = trimws(Perioden),
+    MoeiteMetRondkomen_32 = as.numeric(MoeiteMetRondkomen_32)
+  )
+df_zn <- read_delim(
+  "data/zuid_noord_buurten.csv",
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = ","),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    WijkenEnBuurten = trimws(WijkenEnBuurten),
+    Leeftijd = as.character(Leeftijd),
+    Marges = trimws(Marges),
+    Perioden = trimws(Perioden),
+    MoeiteMetRondkomen_32 = as.numeric(MoeiteMetRondkomen_32)
+  )
+veerkracht_bestand <- sort(
+  list.files("data", pattern = "^50150NED_UntypedDataSet.*\\.csv$", full.names = TRUE),
+  decreasing = TRUE
+)[1]
+print(veerkracht_bestand)
+rivm_veerkracht_schoon <- read_delim(
+  veerkracht_bestand,
+  delim = ";",
+  na = c("", "NA", "."),
+  locale = locale(decimal_mark = "."),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    WijkenEnBuurten = trimws(WijkenEnBuurten),
+    Leeftijd = as.character(Leeftijd),
+    Marges = trimws(Marges),
+    Perioden = trimws(Perioden)
+  ) %>%
+  filter(Perioden == "2022JJ00")
+nieuwe_kolommen <- setdiff(names(rivm_veerkracht_schoon), names(df_zn))
+print(nieuwe_kolommen)
+
+df_samengevoegd <- df_zn %>%
+  left_join(
+    rivm_veerkracht_schoon %>%
+      select(WijkenEnBuurten, Leeftijd, Marges, Perioden, all_of(nieuwe_kolommen)),
+    by = c("WijkenEnBuurten", "Leeftijd", "Marges", "Perioden")
+  )
+nrow(df_samengevoegd)
+
+df_samengevoegd %>%
+  group_by(Stadsdeel, Leeftijd) %>%
+  summarise(
+    n_rijen = n(),
+    n_moeite_geldig = sum(!is.na(MoeiteMetRondkomen_32)),
+    across(all_of(nieuwe_kolommen), ~ sum(!is.na(.x)), .names = "n_geldig_{.col}"),
+    .groups = "drop"
+  )
+install.packages("xlsx")
+library(xlsx)
+write.xlsx(df_samengevoegd, "c:/df_samengevoegd.xlsx")
+library(xlsx)
+write.xlsx(mydata, "c:/mydata.xlsx")
+write.csv(df_samengevoegd, "df_samengevoegd.csv", row.names = FALSE)
+library(dplyr)
+df <- read.csv("df_samengevoegd.csv", stringsAsFactors = FALSE)
+
+df <- df %>%
+  mutate(across(c(LageVeerkracht_22, HogeVeerkracht_23),
+                ~ na_if(trimws(.x), ".")))
+df <- df %>%
+  mutate(across(c(LageVeerkracht_22, HogeVeerkracht_23), as.numeric))
+df_samengevoegd$LageVeerkracht_22[trimws(df_samengevoegd$LageVeerkracht_22) == "."] <- NA
+df_samengevoegd$HogeVeerkracht_23[trimws(df_samengevoegd$HogeVeerkracht_23) == "."] <- NA
+library(dplyr)
+library(tidyr)
+library(gt)
+df <- read.csv("df_samengevoegd.csv",
+               na.strings = c("NA", ".", "       ."), strip.white = TRUE)
+volgorde <- c("18 tot 65 jaar", "65 jaar of ouder", "18 jaar of ouder (totaal)")
+tabel <- df %>%
+  filter(!is.na(MoeiteMetRondkomen_32)) %>%
+  mutate(Leeftijdsgroep = case_match(as.character(Leeftijd),
+                                     "53115" ~ "18 tot 65 jaar",
+                                     "80200" ~ "65 jaar of ouder",
+                                     "20300" ~ "18 jaar of ouder (totaal)")) %>%
+  group_by(Leeftijdsgroep, Stadsdeel) %>%
+  summarise(pct = mean(MoeiteMetRondkomen_32), n = n(), .groups = "drop") %>%
+  pivot_wider(names_from = Stadsdeel, values_from = c(pct, n)) %>%
+  arrange(factor(Leeftijdsgroep, levels = volgorde))
+tabel_gt <- tabel %>%
+  gt(rowname_col = "Leeftijdsgroep") %>%
+  tab_header(title = html("<b>TABEL</b> | Moeite met rondkomen per stadsdeel en leeftijdsgroep")) %>%
+  tab_stubhead(label = "Leeftijdsgroep") %>%
+  tab_spanner("Moeite met rondkomen (%)", columns = c(pct_Noord, pct_Zuid)) %>%
+  tab_spanner("Aantal buurten (n)",       columns = c(n_Noord, n_Zuid)) %>%
+  cols_label(pct_Noord = "Noord", pct_Zuid = "Zuid",
+             n_Noord   = "Noord", n_Zuid   = "Zuid") %>%
+  fmt_number(c(pct_Noord, pct_Zuid), decimals = 1, dec_mark = ",", sep_mark = ".") %>%
+  cols_align("right", everything()) %>%
+  tab_style(cell_text(align = "center"), cells_stub()) %>%
+  tab_style(
+    style = list(cell_text(style = "italic"), cell_fill(color = "#F3F4F6")),
+    locations = list(cells_body(rows = 3), cells_stub(rows = 3))
+  ) %>%
+  opt_footnote_marks(marks = "standard") %>%
+  tab_footnote(
+    "Betreft de bredere leeftijdsgroep en is geen optelling van de rijen erboven.",
+    locations = cells_stub(rows = "18 jaar of ouder (totaal)")
+  ) %>%
+  tab_options(
+    heading.align = "left",
+    table.font.size = px(15),
+    table.border.top.color = "grey60",
+    table.border.bottom.color = "grey60",
+    column_labels.border.bottom.color = "grey60",
+    table_body.hlines.color = "grey85"
+  )
+tabel_gt
+df <- read.csv("df_samengevoegd.csv",
+               na.strings = c("NA", ".", "       ."), strip.white = TRUE)
+
+labels <- c("53115" = "18 tot 65 jaar",
+            "80200" = "65 jaar of ouder",
+            "20300" = "18 jaar of ouder (totaal)")
+volgorde <- unname(labels)
+
+var_labels <- c(MoeiteMetRondkomen_32 = "Moeite met rondkomen (%)",
+                LageVeerkracht_22     = "Lage veerkracht (%)",
+                HogeVeerkracht_23     = "Hoge veerkracht (%)")
+
+var_labels <- c(MoeiteMetRondkomen_32 = "Moeite met rondkomen",
+                LageVeerkracht_22     = "Lage veerkracht (%)",
+                HogeVeerkracht_23     = "Hoge veerkracht (%)")
+df2 <- df %>%
+  mutate(Leeftijdsgroep = unname(labels[as.character(Leeftijd)]))
+df2 <- df2 %>%
+  mutate(across(c(MoeiteMetRondkomen_32, LageVeerkracht_22, HogeVeerkracht_23),
+                as.numeric)) %>%
+  filter(!is.na(MoeiteMetRondkomen_32))
+samenvatting <- df_lang %>%
+  group_by(Variabele, Leeftijdsgroep, Stadsdeel) %>%
+  summarise(pct = mean(waarde), n = n(), .groups = "drop")
+df_lang <- df2 %>%
+  select(Leeftijdsgroep, Stadsdeel,
+         MoeiteMetRondkomen_32, LageVeerkracht_22, HogeVeerkracht_23) %>%
+  pivot_longer(cols = c(MoeiteMetRondkomen_32, LageVeerkracht_22, HogeVeerkracht_23),
+               names_to = "Variabele", values_to = "waarde") %>%
+  mutate(Variabele = unname(var_labels[Variabele]))
+samenvatting <- df_lang %>%
+  group_by(Variabele, Leeftijdsgroep, Stadsdeel) %>%
+  summarise(pct = mean(waarde), n = n(), .groups = "drop")
+tabel <- samenvatting %>%
+  pivot_wider(names_from = Stadsdeel, values_from = c(pct, n)) %>%
+  arrange(factor(Variabele, levels = var_labels),
+          factor(Leeftijdsgroep, levels = volgorde))
+tabel_gt <- tabel %>%
+  gt(rowname_col = "Leeftijdsgroep", groupname_col = "Variabele") %>%
+  tab_header(title = html("<b>TABEL</b> | Moeite met rondkomen en veerkracht per stadsdeel en leeftijdsgroep")) %>%
+  tab_stubhead(label = "Leeftijdsgroep") %>%
+  tab_spanner("Percentage (%)",       columns = c(pct_Noord, pct_Zuid)) %>%
+  tab_spanner("Aantal buurten (n)",   columns = c(n_Noord, n_Zuid)) %>%
+  cols_label(pct_Noord = "Noord", pct_Zuid = "Zuid",
+             n_Noord   = "Noord", n_Zuid   = "Zuid") %>%
+  fmt_number(c(pct_Noord, pct_Zuid), decimals = 1, dec_mark = ",", sep_mark = ".") %>%
+  cols_align("right", everything()) %>%
+  tab_style(cell_text(align = "center"), cells_stub()) %>%
+  tab_style(cell_text(weight = "bold"), cells_row_groups()) %>%
+  tab_style(
+    style = list(cell_text(style = "italic"), cell_fill(color = "#F3F4F6")),
+    locations = list(cells_body(rows = Leeftijdsgroep == "18 jaar of ouder (totaal)"),
+                     cells_stub(rows = Leeftijdsgroep == "18 jaar of ouder (totaal)"))
+  ) %>%
+  opt_footnote_marks(marks = "standard") %>%
+  tab_footnote(
+    "Betreft de bredere leeftijdsgroep en is geen optelling van de rijen erboven.",
+    locations = cells_stub(rows = 3)
+  ) %>%
+  tab_options(
+    heading.align = "left",
+    table.font.size = px(15),
+    table.border.top.color = "grey60",
+    table.border.bottom.color = "grey60",
+    column_labels.border.bottom.color = "grey60",
+    table_body.hlines.color = "grey85"
+  )
+tabel_gt
+
+```
+
