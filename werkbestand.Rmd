@@ -5,6 +5,7 @@ output: html_document
 
 # Maaike
 
+
 ```{r}
 library(readr)
 moeite <- read_delim("data/datasetmoeitemetrondkomen2022.csv", 
